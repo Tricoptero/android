@@ -16,14 +16,7 @@ class AppBarIniciar extends AppBar {
         },
       ),
 
-    new PopupMenuButton(
-        onSelected: (result) => Navigator.pushNamed(context, '/${result}'),
-        itemBuilder: (context) => <PopupMenuEntry<String>>[
-          PopupMenuItem<String>(
-            value: 'compromisos',
-            child: Text('Compromisos'),
-          ),
-        ]),
+
   ]
 
 

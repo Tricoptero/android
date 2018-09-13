@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../blocs/provider_compromisos.dart';
 
 
-class CompromisoDetalle extends StatelessWidget {
+class PlanificacionDetalle extends StatelessWidget {
   Widget build(context) {
     BlocCompromisos bloc = ProviderCompromisos.of(context);
 
@@ -13,14 +13,8 @@ class CompromisoDetalle extends StatelessWidget {
         }
         return Scaffold(
           appBar: new AppBar(
-            title: Text('Compromiso'),
-            actions: editar.data ?
-              null :
-            <Widget>[
-              IconButton(icon: Icon(Icons.edit), onPressed: () {
-                bloc.changeEditarCompromiso(true);
-              })
-            ],
+            title: Text('Modificar Plan'),
+
           ),
 
           body: ListView(
@@ -39,8 +33,8 @@ class CompromisoDetalle extends StatelessWidget {
 
               Padding(padding: EdgeInsets.all(4.0)),
               comentarioField(bloc, editar.data),
-              Row(children: [activoField(bloc, editar.data),Padding(padding: EdgeInsets.all(32.0),),
-              submitButton(context, editar.data)]),
+
+              submitButton(context, editar.data),
             ],
           ),
         );
@@ -52,13 +46,13 @@ class CompromisoDetalle extends StatelessWidget {
       stream: bloc.nombre,
       builder: (context, snapshot) {
         return TextField(
-          enabled: editar ? true : false,
+          enabled: false,
           keyboardType: TextInputType.text,
           controller: bloc.controllerNombre,
           style: Theme
               .of(context)
               .textTheme
-              .title,
+              .subhead,
           decoration: InputDecoration(
             hintText: 'Nombre del Compromiso',
             labelText: 'Título',
@@ -75,22 +69,7 @@ class CompromisoDetalle extends StatelessWidget {
   }
 
   Widget tipoField(BlocCompromisos bloc, editar) {
-    List<DropdownMenuItem> tiposMenu = new List();
-    tiposMenu.add(DropdownMenuItem(
-      value: null,
-      child: Text('Seleccionar Tipo'),
-    ));
-    bloc.tipos.forEach((tipo) {
-      tiposMenu.add(DropdownMenuItem(
-        value: tipo,
-        child: Text(tipo),
-      ));
-    });
-   tiposMenu.add(DropdownMenuItem(
-      value: 'nuevo',
-      child: Text('** Nuevo Tipo **'),
-    ),
-    );
+
 
 
     return StreamBuilder(
@@ -104,45 +83,11 @@ class CompromisoDetalle extends StatelessWidget {
           style: TextStyle(
             color: snapshot.error == null ? Colors.black26: Colors.red,
             //fontWeight: FontWeight.bold,
-            fontSize: 16.0,
+            fontSize: 14.0,
           ),
         ),);
         children.add(Padding(padding: EdgeInsets.only(left: 16.0)));
-        if (editar == true) {
-          children.add(DropdownButton(
-              value: snapshot.data,
-              items: tiposMenu,
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .subhead,
-              hint: Text('Seleccionar Tipo'),
-              onChanged: (value) {
-                bloc.changeSelectTipo(value);
-                if (value!='nuevo') {bloc.controllerNuevoTipo = TextEditingController(text: '');}
-              }
-          ),
-          );
-           children.add(Padding(padding: EdgeInsets.only(left: 16.0)));
-           children.add(
-                Container(width:180.0,child:TextField(
-                  enabled: snapshot.data == 'nuevo' ? true : false,
-                  keyboardType: TextInputType.text,
-                  controller: bloc.controllerNuevoTipo,
 
-                  decoration: InputDecoration(
-                    hintText: snapshot.data == 'nuevo' ?'Nuevo Tipo': '',
-                    icon: Icon(Icons.add),
-
-
-                  ),
-                  onChanged: bloc.changeNuevoTipo,
-                ),
-
-            ));
-
-
-        } else {
           children.add(Text(
             snapshot.data ?? '',
             style: Theme
@@ -151,7 +96,7 @@ class CompromisoDetalle extends StatelessWidget {
                 .subhead,
           ),
           );
-        }
+
 
         return Row(children: children);
     }
@@ -164,7 +109,7 @@ class CompromisoDetalle extends StatelessWidget {
       stream: bloc.duracion,
       builder: (context, snapshot) {
         return TextField(
-          enabled: editar ? true : false,
+          enabled: true,
           keyboardType: TextInputType.text,
           controller: bloc.controllerDuracion,
           decoration: InputDecoration(
@@ -185,7 +130,7 @@ class CompromisoDetalle extends StatelessWidget {
       stream: bloc.periodicidad,
       builder: (context, snapshot) {
         return TextField(
-          enabled: editar ? true : false,
+          enabled: true,
           keyboardType: TextInputType.number,
           controller: bloc.controllerPeriodicidad,
           decoration: InputDecoration(
@@ -202,29 +147,6 @@ class CompromisoDetalle extends StatelessWidget {
     );
   }
 
-  Widget activoField(BlocCompromisos bloc, editar) {
-    return Row(
-        children: <Widget>[
-          Padding(
-              padding: EdgeInsets.only(
-                left: 16.0,
-              )),
-          Text("Activo"),
-          StreamBuilder(
-              stream: bloc.selectActivo,
-              builder: (context, snapshot) {
-                return Checkbox(
-                  value: snapshot.data ?? false,
-                  tristate: false,
-                  onChanged: !editar ? null :
-                      (value) {
-                    bloc.changeSelectActivo(value);
-                  },
-                );
-              }),
-        ]);
-  }
-
 
   Widget comentarioField(BlocCompromisos bloc, editar) {
     return StreamBuilder(
@@ -232,7 +154,7 @@ class CompromisoDetalle extends StatelessWidget {
       builder: (context, snapshot) {
         return
           TextField(
-            enabled: editar ? true : false,
+            enabled: true,
             maxLines: 10,
             keyboardType: TextInputType.multiline,
             controller: bloc.controllerComentario,
@@ -254,23 +176,16 @@ class CompromisoDetalle extends StatelessWidget {
 
   Widget submitButton(context, editar) {
     final BlocCompromisos bloc = ProviderCompromisos.of(context);
-    /*return   StreamBuilder(
-        stream: bloc.submitValid,
-        builder: (context, snapshot) { */
-    if (editar) {
+
       return Center(child: RaisedButton(
         child: Text('confirmar'),
         color: Colors.blue,
         onPressed:  () {
 
               FocusScope.of(context).requestFocus(new FocusNode());
-              bloc.submitLogin(context);
+              bloc.submitPlan(context);
             } ,
       ),);
-    } else {
-      return Container();
-    }
-    // });
   }
 
 }

@@ -1,12 +1,12 @@
 class PlanificacionModel {
 
-  final int ano;
-  final int semana;
-  final int idCompromiso;
-  final Duration duracion;
-  final int periodicidad;
-  final String comentario;
-  final int stamp;
+int ano;
+int semana;
+int idCompromiso;
+Duration duracion;
+int periodicidad;
+String comentario;
+int stamp;
 
   PlanificacionModel (this.ano, this.semana, this.idCompromiso,
       {this.duracion, this.periodicidad, this.comentario, this.stamp} );

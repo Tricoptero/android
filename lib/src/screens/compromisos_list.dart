@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../blocs/provider_compromisos.dart';
 import '../models/compromiso_model.dart';
 import 'dart:async';
+import  'package:flutter_slidable/flutter_slidable.dart';
 
 class CompromisosList extends StatelessWidget {
   Widget build(context) {
@@ -10,7 +11,8 @@ class CompromisosList extends StatelessWidget {
     final _myKey = GlobalKey<ScaffoldState>();
     return new WillPopScope(
       onWillPop: () {
-        _requestPop(context, bloc);
+       return _requestPop(context, bloc);
+
       },
       child: new Scaffold(
         key: _myKey,
@@ -28,17 +30,28 @@ class CompromisosList extends StatelessWidget {
                 },
               )
             ]),
+        floatingActionButton: new FloatingActionButton(
+              child: Icon(Icons.add, size: 40.0,),
+              onPressed: () {
+                bloc.compromisoEdit= new CompromisoModel(0);
+                bloc.cargaCompromiso(bloc.compromisoEdit);
+                bloc.changeEditarCompromiso(true);
+                Navigator.pushNamed(context, '/compromisoDetalle');
+                }),
         body: Listado(context, bloc),
       ),
     );
   }
 
   Future<bool> _requestPop(context, bloc) {
-    if (bloc.flagBuscar) {
+    if (bloc.flagBuscar != null) {
+      if (bloc.flagBuscar) {
       bloc.flagBuscar = false;
       Navigator.pop(context);
-    }
-    Navigator.pop(context);
+    }}
+   // Navigator.pop(context);
+    return new Future.value(true);
+
   }
 
   void buscarControl(context, _myKey) {
@@ -129,6 +142,31 @@ class CompromisosList extends StatelessWidget {
                   bloc.cargaCompromiso(snapshot.data[index]);
                   Navigator.pushNamed(context, '/compromisoDetalle');
                 },
+
+                child:
+                Slidable(delegate: new SlidableDrawerDelegate(),
+                actionExtentRatio: 0.30,
+
+                actions: <Widget>[
+                new IconSlideAction(
+                    caption: 'Borrar/Desactivar',
+                    color: Colors.blue,
+                    icon: Icons.delete,
+                    onTap: () {
+                      bloc.db.deleteCompromiso(snapshot.data[index]).
+                        then((onValue) => bloc.fetchCompromisos());
+                     }),
+                ],
+                secondaryActions: <Widget>[
+                    new IconSlideAction(
+                        caption: 'Borrar/Desactivar',
+                        color: Colors.blue,
+                        icon: Icons.delete,
+                        onTap: () {
+                          bloc.db.deleteCompromiso(snapshot.data[index]).
+                          then((onValue) => bloc.fetchCompromisos());
+                        }),
+                  ],
                 child: Container(
                   margin: EdgeInsets.only(
                       top: 2.0, bottom: 2.0, right: 4.0, left: 4.0),
@@ -164,7 +202,7 @@ class CompromisosList extends StatelessWidget {
                             Row(
                               children: <Widget>[
                                 Text(
-                                    ' Duración: $dura     Dias Semana:${snapshot.data[index].periodicidad}'),
+                                    'Duración: $dura  Dias Semana:${snapshot.data[index].periodicidad}'),
                                 Checkbox(
                                   value: snapshot.data[index].activo,
                                   onChanged: null,
@@ -176,6 +214,7 @@ class CompromisosList extends StatelessWidget {
                       ),
                     ],
                   ),
+                ),
                 ),
               );
             });

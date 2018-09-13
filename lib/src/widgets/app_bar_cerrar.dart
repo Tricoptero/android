@@ -19,14 +19,6 @@ class AppBarCerrar extends AppBar {
         icon: Icon(Icons.lock_open),
         onPressed: () => confirmarCerrar(context),
       ),
-    new PopupMenuButton(
-        onSelected: (result) => Navigator.pushNamed(context, '/${result}'),
-        itemBuilder: (context) => <PopupMenuEntry<String>>[
-          PopupMenuItem<String>(
-            value: 'compromisos',
-            child: Text('Compromisos'),
-          ),
-        ]),
   ]
 
 

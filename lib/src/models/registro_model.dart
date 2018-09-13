@@ -1,8 +1,8 @@
 class RegistroModel {
 
-  final DateTime fecha;
-  final int idCompromiso;
-  final int cumplimiento;
+  DateTime fecha;
+  int idCompromiso;
+  int cumplimiento;
 
   final int stamp;
 

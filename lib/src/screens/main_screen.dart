@@ -20,7 +20,11 @@ class MainScreen extends StatelessWidget {
           children.add(Padding(
             padding: EdgeInsets.all(16.0),
           ));
-          children.add(Container(
+          children.add(GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/registroMes');
+              },
+              child:Container(
             padding: EdgeInsets.all(16.0),
             alignment: Alignment.bottomLeft,
             child: Container(
@@ -29,19 +33,25 @@ class MainScreen extends StatelessWidget {
               padding: EdgeInsets.all(16.0),
               child: Row(
                 children: [
-                  Icon(Icons.wb_incandescent, color: Colors.white, size: 30.0),
+                  Icon(Icons.remove_red_eye, color: Colors.white, size: 30.0),
                   Text(
-                    '  Planificacion',
+                    '  Detalle Mensual',
                     style: TextStyle(color: Colors.white, fontSize: 24.0),
                   ),
                 ],
               ),
             ),
-          ));
+          ),
+          ),
+          );
           children.add(Padding(
             padding: EdgeInsets.all(16.0),
           ));
-          children.add(
+          children.add(GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, '/registro');
+            },
+            child:
             Container(
               padding: EdgeInsets.all(16.0),
               alignment: Alignment.bottomLeft,
@@ -60,6 +70,7 @@ class MainScreen extends StatelessWidget {
                 ),
               ),
             ),
+          ),
           );
           children.add(Padding(
             padding: EdgeInsets.all(16.0),

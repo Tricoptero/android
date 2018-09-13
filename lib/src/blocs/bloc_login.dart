@@ -70,7 +70,6 @@ class BlocLogin extends Object with Validators {
       changePassword(validPassword);
       changeEmailFinal(validEmail);
       if (_recuerdaEmail.value)  {prefs.setUsuario(validEmail, validPassword);}
-      print('usuario: ${prefs.getEmail()}');
       Navigator.pop(context);
       break;
     default:
